@@ -4,36 +4,36 @@
   </div>
 
   <div class="col-md-9">
-    <h1 class="display-4"><span>Welcome, Java Hipster!</span> (Paint Calculator)</h1>
+    <h1 class="display-4"><span>Bem vindo, Java Hipster!</span> (Paint Calculator)</h1>
 
-    <p class="lead">This is your homepage</p>
+    <p class="lead">Esta é a página principal</p>
 
     <div [ngSwitch]="account !== null">
       <div class="alert alert-success" *ngSwitchCase="true">
-        <span id="home-logged-message" *ngIf="account">You are logged in as user "{{ account.login }}".</span>
+        <span id="home-logged-message" *ngIf="account">Você está logado como "{{ account.login }}".</span>
       </div>
 
       <div class="alert alert-warning" *ngSwitchCase="false">
-        <span>If you want to </span>
-        <a class="alert-link" (click)="login()">sign in</a
+        <span>Se deseja </span>
+        <a class="alert-link" (click)="login()">entrar</a
         ><span
-          >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
-          password="user").</span
+          >, utilize as seguintes contas padrões:<br />- Administrador (usuário="admin" and senha="admin") <br />- Usuário (usuário="user" e
+          senha="user").</span
         >
       </div>
 
       <div class="alert alert-warning" *ngSwitchCase="false">
-        <span>You don't have an account yet?</span>&nbsp;
-        <a class="alert-link" routerLink="account/register">Register a new account</a>
+        <span>Não possui uma conta ainda?</span>&nbsp;
+        <a class="alert-link" routerLink="account/register">Crie uma nova conta</a>
       </div>
     </div>
 
-    <p>If you have any question on JHipster:</p>
+    <p>Em caso de dúvida sobre o JHipster:</p>
 
     <ul>
-      <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">JHipster homepage</a></li>
+      <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">Página principal JHipster</a></li>
       <li>
-        <a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer">JHipster on Stack Overflow</a>
+        <a href="https://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener noreferrer">JHipster no Stack Overflow</a>
       </li>
       <li>
         <a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener noreferrer"
@@ -41,13 +41,15 @@
         >
       </li>
       <li>
-        <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">JHipster public chat room</a>
+        <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer"
+          >Sala de bate-papo pública JHipster</a
+        >
       </li>
-      <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer">follow @jhipster on Twitter</a></li>
+      <li><a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer">siga @jhipster no Twitter</a></li>
     </ul>
 
     <p>
-      <span>If you like JHipster, don't forget to give us a star on</span>
+      <span>Se você gosta do JHipster, não se esqueça de avaliar no</span>
       <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer">GitHub</a>!
     </p>
   </div>

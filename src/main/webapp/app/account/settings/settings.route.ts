@@ -7,7 +7,7 @@ export const settingsRoute: Route = {
   path: 'settings',
   component: SettingsComponent,
   data: {
-    pageTitle: 'Settings',
+    pageTitle: 'Configuração',
   },
   canActivate: [UserRouteAccessService],
 };
