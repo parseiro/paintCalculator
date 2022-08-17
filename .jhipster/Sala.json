@@ -1,0 +1,28 @@
+{
+  "applications": ["paintCalculator"],
+  "changelogDate": "20220818003733",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "sala",
+  "fields": [
+    {
+      "fieldName": "nome",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Sala",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "parede",
+      "otherEntityRelationshipName": "sala",
+      "relationshipName": "paredes",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}
