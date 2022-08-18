@@ -1,0 +1,46 @@
+{
+  "applications": ["paintCalculator"],
+  "changelogDate": "20220818003734",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "parede",
+  "fields": [
+    {
+      "fieldName": "largura",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "altura",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "numPortas",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "numJanelas",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Parede",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "nome",
+      "otherEntityName": "sala",
+      "otherEntityRelationshipName": "paredes",
+      "relationshipName": "sala",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

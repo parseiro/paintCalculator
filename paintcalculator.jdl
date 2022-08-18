@@ -1,0 +1,45 @@
+
+application {
+  config {
+    baseName paintCalculator,
+    applicationType monolith,
+    packageName com.vilelapinheiro.paintcalculator,
+    authenticationType jwt,
+    clientFramework angular,
+    enableHibernateCache false,
+    enableTranslation false,
+    nativeLanguage pt-br,
+    prodDatabaseType postgresql,
+    serverPort 9999
+  }
+  entities *
+}
+
+entity Sala {
+	nome String required
+}
+
+entity Parede {
+    largura BigDecimal required
+    altura BigDecimal required
+    numPortas Integer min(0)
+    numJanelas Integer min(0)
+}
+
+//entity Porta {
+//    largura BigDecimal required
+//    altura BigDecimal required
+//}
+//
+//entity Janela {
+//    largura BigDecimal required
+//    altura BigDecimal required
+//}
+
+relationship OneToMany {
+  Sala{paredes} to Parede{sala(nome)}
+//  Parede{janelas} to Janela{parede required}
+//  Parede{portas} to Porta{parede required}
+}
+
+service Sala, Parede with serviceClass

@@ -1,0 +1,89 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-parede-heading" data-cy="ParedeCreateUpdateHeading">Criar ou editar Parede</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_largura">Largura</label>
+          <input type="number" class="form-control" name="largura" id="field_largura" data-cy="largura" formControlName="largura" />
+          <div *ngIf="editForm.get('largura')!.invalid && (editForm.get('largura')!.dirty || editForm.get('largura')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('largura')?.errors?.required"> O campo é obrigatório. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('largura')?.errors?.number">
+              Este campo é do tipo numérico.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_altura">Altura</label>
+          <input type="number" class="form-control" name="altura" id="field_altura" data-cy="altura" formControlName="altura" />
+          <div *ngIf="editForm.get('altura')!.invalid && (editForm.get('altura')!.dirty || editForm.get('altura')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('altura')?.errors?.required"> O campo é obrigatório. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('altura')?.errors?.number"> Este campo é do tipo numérico. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_numPortas">Num Portas</label>
+          <input type="number" class="form-control" name="numPortas" id="field_numPortas" data-cy="numPortas" formControlName="numPortas" />
+          <div *ngIf="editForm.get('numPortas')!.invalid && (editForm.get('numPortas')!.dirty || editForm.get('numPortas')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('numPortas')?.errors?.min"> Este campo deve ser maior que 0. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('numPortas')?.errors?.number">
+              Este campo é do tipo numérico.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_numJanelas">Num Janelas</label>
+          <input
+            type="number"
+            class="form-control"
+            name="numJanelas"
+            id="field_numJanelas"
+            data-cy="numJanelas"
+            formControlName="numJanelas"
+          />
+          <div *ngIf="editForm.get('numJanelas')!.invalid && (editForm.get('numJanelas')!.dirty || editForm.get('numJanelas')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('numJanelas')?.errors?.min"> Este campo deve ser maior que 0. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('numJanelas')?.errors?.number">
+              Este campo é do tipo numérico.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_sala">Sala</label>
+          <select class="form-control" id="field_sala" data-cy="sala" name="sala" formControlName="sala" [compareWith]="compareSala">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="salaOption" *ngFor="let salaOption of salasSharedCollection">{{ salaOption.nome }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancelar</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Salvar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
