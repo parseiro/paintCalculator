@@ -20,10 +20,10 @@ entity Sala {
 }
 
 entity Parede {
-    largura BigDecimal required min(0) max(100)
-    altura BigDecimal required min(0) max(100)
-    numPortas Integer min(0) max(20)
-    numJanelas Integer min(0) max(100)
+    largura BigDecimal required min(0)
+    altura BigDecimal required min(0)
+    numPortas Integer required min(0)
+    numJanelas Integer required min(0)
 }
 
 //entity Porta {

@@ -4,6 +4,8 @@ import com.vilelapinheiro.paintcalculator.domain.Parede;
 import com.vilelapinheiro.paintcalculator.repository.ParedeRepository;
 import com.vilelapinheiro.paintcalculator.service.dto.ParedeDTO;
 import com.vilelapinheiro.paintcalculator.service.mapper.ParedeMapper;
+import com.vilelapinheiro.paintcalculator.web.rest.errors.BadRequestAlertException;
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +42,19 @@ public class ParedeService {
      * @return the persisted entity.
      */
     public ParedeDTO save(ParedeDTO paredeDTO) {
+        /*
+        BigDecimal area = paredeDTO.getLargura().multiply(paredeDTO.getAltura());
+        if (area.compareTo(BigDecimal.ONE) < 0) {
+            throw new BadRequestAlertException(
+                "Nenhuma parede pode ter menos de 1 metro quadrado",
+                "Parede", null);
+        }
+        if (area.compareTo(BigDecimal.valueOf(50)) > 0){
+            throw new BadRequestAlertException(
+                "Nenhuma parede pode ter mais de 50 metros quadrados",
+                "Parede", null);
+        }*/
+
         log.debug("Request to save Parede : {}", paredeDTO);
         Parede parede = paredeMapper.toEntity(paredeDTO);
         parede = paredeRepository.save(parede);
