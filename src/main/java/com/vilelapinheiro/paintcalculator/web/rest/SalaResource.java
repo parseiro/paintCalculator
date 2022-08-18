@@ -1,8 +1,8 @@
 package com.vilelapinheiro.paintcalculator.web.rest;
 
-import com.vilelapinheiro.paintcalculator.domain.Sala;
 import com.vilelapinheiro.paintcalculator.repository.SalaRepository;
 import com.vilelapinheiro.paintcalculator.service.SalaService;
+import com.vilelapinheiro.paintcalculator.service.dto.SalaDTO;
 import com.vilelapinheiro.paintcalculator.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,17 +45,17 @@ public class SalaResource {
     /**
      * {@code POST  /salas} : Create a new sala.
      *
-     * @param sala the sala to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new sala, or with status {@code 400 (Bad Request)} if the sala has already an ID.
+     * @param salaDTO the salaDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new salaDTO, or with status {@code 400 (Bad Request)} if the sala has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/salas")
-    public ResponseEntity<Sala> createSala(@Valid @RequestBody Sala sala) throws URISyntaxException {
-        log.debug("REST request to save Sala : {}", sala);
-        if (sala.getId() != null) {
+    public ResponseEntity<SalaDTO> createSala(@Valid @RequestBody SalaDTO salaDTO) throws URISyntaxException {
+        log.debug("REST request to save Sala : {}", salaDTO);
+        if (salaDTO.getId() != null) {
             throw new BadRequestAlertException("A new sala cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Sala result = salaService.save(sala);
+        SalaDTO result = salaService.save(salaDTO);
         return ResponseEntity
             .created(new URI("/api/salas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -65,21 +65,23 @@ public class SalaResource {
     /**
      * {@code PUT  /salas/:id} : Updates an existing sala.
      *
-     * @param id the id of the sala to save.
-     * @param sala the sala to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated sala,
-     * or with status {@code 400 (Bad Request)} if the sala is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the sala couldn't be updated.
+     * @param id the id of the salaDTO to save.
+     * @param salaDTO the salaDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated salaDTO,
+     * or with status {@code 400 (Bad Request)} if the salaDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the salaDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/salas/{id}")
-    public ResponseEntity<Sala> updateSala(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Sala sala)
-        throws URISyntaxException {
-        log.debug("REST request to update Sala : {}, {}", id, sala);
-        if (sala.getId() == null) {
+    public ResponseEntity<SalaDTO> updateSala(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody SalaDTO salaDTO
+    ) throws URISyntaxException {
+        log.debug("REST request to update Sala : {}, {}", id, salaDTO);
+        if (salaDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, sala.getId())) {
+        if (!Objects.equals(id, salaDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -87,34 +89,34 @@ public class SalaResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Sala result = salaService.update(sala);
+        SalaDTO result = salaService.update(salaDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, sala.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, salaDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /salas/:id} : Partial updates given fields of an existing sala, field will ignore if it is null
      *
-     * @param id the id of the sala to save.
-     * @param sala the sala to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated sala,
-     * or with status {@code 400 (Bad Request)} if the sala is not valid,
-     * or with status {@code 404 (Not Found)} if the sala is not found,
-     * or with status {@code 500 (Internal Server Error)} if the sala couldn't be updated.
+     * @param id the id of the salaDTO to save.
+     * @param salaDTO the salaDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated salaDTO,
+     * or with status {@code 400 (Bad Request)} if the salaDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the salaDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the salaDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/salas/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Sala> partialUpdateSala(
+    public ResponseEntity<SalaDTO> partialUpdateSala(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Sala sala
+        @NotNull @RequestBody SalaDTO salaDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Sala partially : {}, {}", id, sala);
-        if (sala.getId() == null) {
+        log.debug("REST request to partial update Sala partially : {}, {}", id, salaDTO);
+        if (salaDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, sala.getId())) {
+        if (!Objects.equals(id, salaDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -122,11 +124,11 @@ public class SalaResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Sala> result = salaService.partialUpdate(sala);
+        Optional<SalaDTO> result = salaService.partialUpdate(salaDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, sala.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, salaDTO.getId().toString())
         );
     }
 
@@ -136,7 +138,7 @@ public class SalaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of salas in body.
      */
     @GetMapping("/salas")
-    public List<Sala> getAllSalas() {
+    public List<SalaDTO> getAllSalas() {
         log.debug("REST request to get all Salas");
         return salaService.findAll();
     }
@@ -144,20 +146,20 @@ public class SalaResource {
     /**
      * {@code GET  /salas/:id} : get the "id" sala.
      *
-     * @param id the id of the sala to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the sala, or with status {@code 404 (Not Found)}.
+     * @param id the id of the salaDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the salaDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/salas/{id}")
-    public ResponseEntity<Sala> getSala(@PathVariable Long id) {
+    public ResponseEntity<SalaDTO> getSala(@PathVariable Long id) {
         log.debug("REST request to get Sala : {}", id);
-        Optional<Sala> sala = salaService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(sala);
+        Optional<SalaDTO> salaDTO = salaService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(salaDTO);
     }
 
     /**
      * {@code DELETE  /salas/:id} : delete the "id" sala.
      *
-     * @param id the id of the sala to delete.
+     * @param id the id of the salaDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/salas/{id}")

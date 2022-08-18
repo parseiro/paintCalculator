@@ -43,3 +43,5 @@ relationship OneToMany {
 }
 
 service Sala, Parede with serviceClass
+
+dto Sala, Parede with mapstruct

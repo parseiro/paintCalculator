@@ -2,8 +2,12 @@ package com.vilelapinheiro.paintcalculator.service;
 
 import com.vilelapinheiro.paintcalculator.domain.Parede;
 import com.vilelapinheiro.paintcalculator.repository.ParedeRepository;
+import com.vilelapinheiro.paintcalculator.service.dto.ParedeDTO;
+import com.vilelapinheiro.paintcalculator.service.mapper.ParedeMapper;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,60 +26,57 @@ public class ParedeService {
 
     private final ParedeRepository paredeRepository;
 
-    public ParedeService(ParedeRepository paredeRepository) {
+    private final ParedeMapper paredeMapper;
+
+    public ParedeService(ParedeRepository paredeRepository, ParedeMapper paredeMapper) {
         this.paredeRepository = paredeRepository;
+        this.paredeMapper = paredeMapper;
     }
 
     /**
      * Save a parede.
      *
-     * @param parede the entity to save.
+     * @param paredeDTO the entity to save.
      * @return the persisted entity.
      */
-    public Parede save(Parede parede) {
-        log.debug("Request to save Parede : {}", parede);
-        return paredeRepository.save(parede);
+    public ParedeDTO save(ParedeDTO paredeDTO) {
+        log.debug("Request to save Parede : {}", paredeDTO);
+        Parede parede = paredeMapper.toEntity(paredeDTO);
+        parede = paredeRepository.save(parede);
+        return paredeMapper.toDto(parede);
     }
 
     /**
      * Update a parede.
      *
-     * @param parede the entity to save.
+     * @param paredeDTO the entity to save.
      * @return the persisted entity.
      */
-    public Parede update(Parede parede) {
-        log.debug("Request to save Parede : {}", parede);
-        return paredeRepository.save(parede);
+    public ParedeDTO update(ParedeDTO paredeDTO) {
+        log.debug("Request to save Parede : {}", paredeDTO);
+        Parede parede = paredeMapper.toEntity(paredeDTO);
+        parede = paredeRepository.save(parede);
+        return paredeMapper.toDto(parede);
     }
 
     /**
      * Partially update a parede.
      *
-     * @param parede the entity to update partially.
+     * @param paredeDTO the entity to update partially.
      * @return the persisted entity.
      */
-    public Optional<Parede> partialUpdate(Parede parede) {
-        log.debug("Request to partially update Parede : {}", parede);
+    public Optional<ParedeDTO> partialUpdate(ParedeDTO paredeDTO) {
+        log.debug("Request to partially update Parede : {}", paredeDTO);
 
         return paredeRepository
-            .findById(parede.getId())
+            .findById(paredeDTO.getId())
             .map(existingParede -> {
-                if (parede.getLargura() != null) {
-                    existingParede.setLargura(parede.getLargura());
-                }
-                if (parede.getAltura() != null) {
-                    existingParede.setAltura(parede.getAltura());
-                }
-                if (parede.getNumPortas() != null) {
-                    existingParede.setNumPortas(parede.getNumPortas());
-                }
-                if (parede.getNumJanelas() != null) {
-                    existingParede.setNumJanelas(parede.getNumJanelas());
-                }
+                paredeMapper.partialUpdate(existingParede, paredeDTO);
 
                 return existingParede;
             })
-            .map(paredeRepository::save);
+            .map(paredeRepository::save)
+            .map(paredeMapper::toDto);
     }
 
     /**
@@ -84,9 +85,9 @@ public class ParedeService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<Parede> findAll() {
+    public List<ParedeDTO> findAll() {
         log.debug("Request to get all Paredes");
-        return paredeRepository.findAll();
+        return paredeRepository.findAll().stream().map(paredeMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -94,8 +95,8 @@ public class ParedeService {
      *
      * @return the list of entities.
      */
-    public Page<Parede> findAllWithEagerRelationships(Pageable pageable) {
-        return paredeRepository.findAllWithEagerRelationships(pageable);
+    public Page<ParedeDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return paredeRepository.findAllWithEagerRelationships(pageable).map(paredeMapper::toDto);
     }
 
     /**
@@ -105,9 +106,9 @@ public class ParedeService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Parede> findOne(Long id) {
+    public Optional<ParedeDTO> findOne(Long id) {
         log.debug("Request to get Parede : {}", id);
-        return paredeRepository.findOneWithEagerRelationships(id);
+        return paredeRepository.findOneWithEagerRelationships(id).map(paredeMapper::toDto);
     }
 
     /**

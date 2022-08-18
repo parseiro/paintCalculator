@@ -1,8 +1,8 @@
 package com.vilelapinheiro.paintcalculator.web.rest;
 
-import com.vilelapinheiro.paintcalculator.domain.Parede;
 import com.vilelapinheiro.paintcalculator.repository.ParedeRepository;
 import com.vilelapinheiro.paintcalculator.service.ParedeService;
+import com.vilelapinheiro.paintcalculator.service.dto.ParedeDTO;
 import com.vilelapinheiro.paintcalculator.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,17 +45,17 @@ public class ParedeResource {
     /**
      * {@code POST  /paredes} : Create a new parede.
      *
-     * @param parede the parede to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new parede, or with status {@code 400 (Bad Request)} if the parede has already an ID.
+     * @param paredeDTO the paredeDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new paredeDTO, or with status {@code 400 (Bad Request)} if the parede has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/paredes")
-    public ResponseEntity<Parede> createParede(@Valid @RequestBody Parede parede) throws URISyntaxException {
-        log.debug("REST request to save Parede : {}", parede);
-        if (parede.getId() != null) {
+    public ResponseEntity<ParedeDTO> createParede(@Valid @RequestBody ParedeDTO paredeDTO) throws URISyntaxException {
+        log.debug("REST request to save Parede : {}", paredeDTO);
+        if (paredeDTO.getId() != null) {
             throw new BadRequestAlertException("A new parede cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Parede result = paredeService.save(parede);
+        ParedeDTO result = paredeService.save(paredeDTO);
         return ResponseEntity
             .created(new URI("/api/paredes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -65,23 +65,23 @@ public class ParedeResource {
     /**
      * {@code PUT  /paredes/:id} : Updates an existing parede.
      *
-     * @param id the id of the parede to save.
-     * @param parede the parede to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated parede,
-     * or with status {@code 400 (Bad Request)} if the parede is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the parede couldn't be updated.
+     * @param id the id of the paredeDTO to save.
+     * @param paredeDTO the paredeDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated paredeDTO,
+     * or with status {@code 400 (Bad Request)} if the paredeDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the paredeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/paredes/{id}")
-    public ResponseEntity<Parede> updateParede(
+    public ResponseEntity<ParedeDTO> updateParede(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Parede parede
+        @Valid @RequestBody ParedeDTO paredeDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update Parede : {}, {}", id, parede);
-        if (parede.getId() == null) {
+        log.debug("REST request to update Parede : {}, {}", id, paredeDTO);
+        if (paredeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, parede.getId())) {
+        if (!Objects.equals(id, paredeDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -89,34 +89,34 @@ public class ParedeResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Parede result = paredeService.update(parede);
+        ParedeDTO result = paredeService.update(paredeDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, parede.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, paredeDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /paredes/:id} : Partial updates given fields of an existing parede, field will ignore if it is null
      *
-     * @param id the id of the parede to save.
-     * @param parede the parede to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated parede,
-     * or with status {@code 400 (Bad Request)} if the parede is not valid,
-     * or with status {@code 404 (Not Found)} if the parede is not found,
-     * or with status {@code 500 (Internal Server Error)} if the parede couldn't be updated.
+     * @param id the id of the paredeDTO to save.
+     * @param paredeDTO the paredeDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated paredeDTO,
+     * or with status {@code 400 (Bad Request)} if the paredeDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the paredeDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the paredeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/paredes/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Parede> partialUpdateParede(
+    public ResponseEntity<ParedeDTO> partialUpdateParede(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Parede parede
+        @NotNull @RequestBody ParedeDTO paredeDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Parede partially : {}, {}", id, parede);
-        if (parede.getId() == null) {
+        log.debug("REST request to partial update Parede partially : {}, {}", id, paredeDTO);
+        if (paredeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, parede.getId())) {
+        if (!Objects.equals(id, paredeDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -124,11 +124,11 @@ public class ParedeResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Parede> result = paredeService.partialUpdate(parede);
+        Optional<ParedeDTO> result = paredeService.partialUpdate(paredeDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, parede.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, paredeDTO.getId().toString())
         );
     }
 
@@ -139,7 +139,7 @@ public class ParedeResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of paredes in body.
      */
     @GetMapping("/paredes")
-    public List<Parede> getAllParedes(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<ParedeDTO> getAllParedes(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Paredes");
         return paredeService.findAll();
     }
@@ -147,20 +147,20 @@ public class ParedeResource {
     /**
      * {@code GET  /paredes/:id} : get the "id" parede.
      *
-     * @param id the id of the parede to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the parede, or with status {@code 404 (Not Found)}.
+     * @param id the id of the paredeDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the paredeDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/paredes/{id}")
-    public ResponseEntity<Parede> getParede(@PathVariable Long id) {
+    public ResponseEntity<ParedeDTO> getParede(@PathVariable Long id) {
         log.debug("REST request to get Parede : {}", id);
-        Optional<Parede> parede = paredeService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(parede);
+        Optional<ParedeDTO> paredeDTO = paredeService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(paredeDTO);
     }
 
     /**
      * {@code DELETE  /paredes/:id} : delete the "id" parede.
      *
-     * @param id the id of the parede to delete.
+     * @param id the id of the paredeDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/paredes/{id}")

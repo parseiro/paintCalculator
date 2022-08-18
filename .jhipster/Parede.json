@@ -1,7 +1,7 @@
 {
   "applications": ["paintCalculator"],
-  "changelogDate": "20220818011815",
-  "dto": "no",
+  "changelogDate": "20220818014023",
+  "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "parede",
   "fields": [

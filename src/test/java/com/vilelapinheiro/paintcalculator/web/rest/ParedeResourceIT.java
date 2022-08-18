@@ -11,6 +11,8 @@ import com.vilelapinheiro.paintcalculator.IntegrationTest;
 import com.vilelapinheiro.paintcalculator.domain.Parede;
 import com.vilelapinheiro.paintcalculator.repository.ParedeRepository;
 import com.vilelapinheiro.paintcalculator.service.ParedeService;
+import com.vilelapinheiro.paintcalculator.service.dto.ParedeDTO;
+import com.vilelapinheiro.paintcalculator.service.mapper.ParedeMapper;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +67,9 @@ class ParedeResourceIT {
     @Mock
     private ParedeRepository paredeRepositoryMock;
 
+    @Autowired
+    private ParedeMapper paredeMapper;
+
     @Mock
     private ParedeService paredeServiceMock;
 
@@ -116,8 +121,9 @@ class ParedeResourceIT {
     void createParede() throws Exception {
         int databaseSizeBeforeCreate = paredeRepository.findAll().size();
         // Create the Parede
+        ParedeDTO paredeDTO = paredeMapper.toDto(parede);
         restParedeMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(parede)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paredeDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Parede in the database
@@ -135,12 +141,13 @@ class ParedeResourceIT {
     void createParedeWithExistingId() throws Exception {
         // Create the Parede with an existing ID
         parede.setId(1L);
+        ParedeDTO paredeDTO = paredeMapper.toDto(parede);
 
         int databaseSizeBeforeCreate = paredeRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restParedeMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(parede)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paredeDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Parede in the database
@@ -156,9 +163,10 @@ class ParedeResourceIT {
         parede.setLargura(null);
 
         // Create the Parede, which fails.
+        ParedeDTO paredeDTO = paredeMapper.toDto(parede);
 
         restParedeMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(parede)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paredeDTO)))
             .andExpect(status().isBadRequest());
 
         List<Parede> paredeList = paredeRepository.findAll();
@@ -173,9 +181,10 @@ class ParedeResourceIT {
         parede.setAltura(null);
 
         // Create the Parede, which fails.
+        ParedeDTO paredeDTO = paredeMapper.toDto(parede);
 
         restParedeMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(parede)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paredeDTO)))
             .andExpect(status().isBadRequest());
 
         List<Parede> paredeList = paredeRepository.findAll();
@@ -255,12 +264,13 @@ class ParedeResourceIT {
         // Disconnect from session so that the updates on updatedParede are not directly saved in db
         em.detach(updatedParede);
         updatedParede.largura(UPDATED_LARGURA).altura(UPDATED_ALTURA).numPortas(UPDATED_NUM_PORTAS).numJanelas(UPDATED_NUM_JANELAS);
+        ParedeDTO paredeDTO = paredeMapper.toDto(updatedParede);
 
         restParedeMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedParede.getId())
+                put(ENTITY_API_URL_ID, paredeDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedParede))
+                    .content(TestUtil.convertObjectToJsonBytes(paredeDTO))
             )
             .andExpect(status().isOk());
 
@@ -280,12 +290,15 @@ class ParedeResourceIT {
         int databaseSizeBeforeUpdate = paredeRepository.findAll().size();
         parede.setId(count.incrementAndGet());
 
+        // Create the Parede
+        ParedeDTO paredeDTO = paredeMapper.toDto(parede);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restParedeMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, parede.getId())
+                put(ENTITY_API_URL_ID, paredeDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(parede))
+                    .content(TestUtil.convertObjectToJsonBytes(paredeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -300,12 +313,15 @@ class ParedeResourceIT {
         int databaseSizeBeforeUpdate = paredeRepository.findAll().size();
         parede.setId(count.incrementAndGet());
 
+        // Create the Parede
+        ParedeDTO paredeDTO = paredeMapper.toDto(parede);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restParedeMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(parede))
+                    .content(TestUtil.convertObjectToJsonBytes(paredeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -320,9 +336,12 @@ class ParedeResourceIT {
         int databaseSizeBeforeUpdate = paredeRepository.findAll().size();
         parede.setId(count.incrementAndGet());
 
+        // Create the Parede
+        ParedeDTO paredeDTO = paredeMapper.toDto(parede);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restParedeMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(parede)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(paredeDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Parede in the database
@@ -400,12 +419,15 @@ class ParedeResourceIT {
         int databaseSizeBeforeUpdate = paredeRepository.findAll().size();
         parede.setId(count.incrementAndGet());
 
+        // Create the Parede
+        ParedeDTO paredeDTO = paredeMapper.toDto(parede);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restParedeMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, parede.getId())
+                patch(ENTITY_API_URL_ID, paredeDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(parede))
+                    .content(TestUtil.convertObjectToJsonBytes(paredeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -420,12 +442,15 @@ class ParedeResourceIT {
         int databaseSizeBeforeUpdate = paredeRepository.findAll().size();
         parede.setId(count.incrementAndGet());
 
+        // Create the Parede
+        ParedeDTO paredeDTO = paredeMapper.toDto(parede);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restParedeMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(parede))
+                    .content(TestUtil.convertObjectToJsonBytes(paredeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -440,9 +465,14 @@ class ParedeResourceIT {
         int databaseSizeBeforeUpdate = paredeRepository.findAll().size();
         parede.setId(count.incrementAndGet());
 
+        // Create the Parede
+        ParedeDTO paredeDTO = paredeMapper.toDto(parede);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restParedeMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(parede)))
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(paredeDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Parede in the database
