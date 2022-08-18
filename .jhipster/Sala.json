@@ -1,6 +1,6 @@
 {
   "applications": ["paintCalculator"],
-  "changelogDate": "20220818003733",
+  "changelogDate": "20220818011814",
   "dto": "no",
   "embedded": false,
   "entityTableName": "sala",

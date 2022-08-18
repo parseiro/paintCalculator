@@ -43,16 +43,16 @@ export class ParedeFormService {
         }
       ),
       largura: new FormControl(paredeRawValue.largura, {
-        validators: [Validators.required],
+        validators: [Validators.required, Validators.min(0), Validators.max(100)],
       }),
       altura: new FormControl(paredeRawValue.altura, {
-        validators: [Validators.required],
+        validators: [Validators.required, Validators.min(0), Validators.max(100)],
       }),
       numPortas: new FormControl(paredeRawValue.numPortas, {
-        validators: [Validators.min(0)],
+        validators: [Validators.min(0), Validators.max(20)],
       }),
       numJanelas: new FormControl(paredeRawValue.numJanelas, {
-        validators: [Validators.min(0)],
+        validators: [Validators.min(0), Validators.max(100)],
       }),
       sala: new FormControl(paredeRawValue.sala),
     });

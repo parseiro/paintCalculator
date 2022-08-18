@@ -41,11 +41,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ParedeResourceIT {
 
-    private static final BigDecimal DEFAULT_LARGURA = new BigDecimal(1);
-    private static final BigDecimal UPDATED_LARGURA = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_LARGURA = new BigDecimal(0);
+    private static final BigDecimal UPDATED_LARGURA = new BigDecimal(1);
 
-    private static final BigDecimal DEFAULT_ALTURA = new BigDecimal(1);
-    private static final BigDecimal UPDATED_ALTURA = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_ALTURA = new BigDecimal(0);
+    private static final BigDecimal UPDATED_ALTURA = new BigDecimal(1);
 
     private static final Integer DEFAULT_NUM_PORTAS = 0;
     private static final Integer UPDATED_NUM_PORTAS = 1;

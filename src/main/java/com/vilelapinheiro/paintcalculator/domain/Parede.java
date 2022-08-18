@@ -22,18 +22,24 @@ public class Parede implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "largura", precision = 4, scale = 2, nullable = false)
-    private BigDecimal largura = BigDecimal.valueOf(2);
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "100")
+    @Column(name = "largura", precision = 21, scale = 2, nullable = false)
+    private BigDecimal largura;
 
     @NotNull
-    @Column(name = "altura", precision = 4, scale = 2, nullable = false)
-    private BigDecimal altura = BigDecimal.valueOf(2);
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "100")
+    @Column(name = "altura", precision = 21, scale = 2, nullable = false)
+    private BigDecimal altura;
 
     @Min(value = 0)
+    @Max(value = 20)
     @Column(name = "num_portas")
     private Integer numPortas;
 
     @Min(value = 0)
+    @Max(value = 100)
     @Column(name = "num_janelas")
     private Integer numJanelas;
 

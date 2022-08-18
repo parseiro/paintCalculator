@@ -2,28 +2,28 @@ import { IParede, NewParede } from './parede.model';
 
 export const sampleWithRequiredData: IParede = {
   id: 54297,
-  largura: 83938,
-  altura: 42575,
+  largura: 84,
+  altura: 43,
 };
 
 export const sampleWithPartialData: IParede = {
   id: 64293,
-  largura: 7644,
-  altura: 95180,
-  numPortas: 52759,
+  largura: 7,
+  altura: 96,
+  numPortas: 11,
 };
 
 export const sampleWithFullData: IParede = {
   id: 44424,
-  largura: 85905,
-  altura: 45705,
-  numPortas: 97008,
-  numJanelas: 85030,
+  largura: 86,
+  altura: 46,
+  numPortas: 20,
+  numJanelas: 85,
 };
 
 export const sampleWithNewData: NewParede = {
-  largura: 77314,
-  altura: 74063,
+  largura: 78,
+  altura: 74,
   id: null,
 };
 

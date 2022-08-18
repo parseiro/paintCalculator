@@ -1,6 +1,6 @@
 {
   "applications": ["paintCalculator"],
-  "changelogDate": "20220818003734",
+  "changelogDate": "20220818011815",
   "dto": "no",
   "embedded": false,
   "entityTableName": "parede",
@@ -8,23 +8,29 @@
     {
       "fieldName": "largura",
       "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "100",
+      "fieldValidateRulesMin": "0"
     },
     {
       "fieldName": "altura",
       "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "100",
+      "fieldValidateRulesMin": "0"
     },
     {
       "fieldName": "numPortas",
       "fieldType": "Integer",
-      "fieldValidateRules": ["min"],
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "20",
       "fieldValidateRulesMin": "0"
     },
     {
       "fieldName": "numJanelas",
       "fieldType": "Integer",
-      "fieldValidateRules": ["min"],
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "100",
       "fieldValidateRulesMin": "0"
     }
   ],
