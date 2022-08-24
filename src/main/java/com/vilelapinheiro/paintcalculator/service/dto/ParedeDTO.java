@@ -2,6 +2,7 @@ package com.vilelapinheiro.paintcalculator.service.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 import javax.validation.constraints.*;
 
@@ -10,6 +11,11 @@ import javax.validation.constraints.*;
  */
 public class ParedeDTO implements Serializable {
 
+    public static final BigDecimal JANELA_LARGURA = BigDecimal.valueOf(2);
+    public static final BigDecimal JANELA_ALTURA = BigDecimal.valueOf(1.2);
+    public static final BigDecimal PORTA_LARGURA = BigDecimal.valueOf(0.8);
+    public static final BigDecimal PORTA_ALTURA = BigDecimal.valueOf(1.9);
+    public static final BigDecimal PAREDE_MAIS_ALTA_QUE_PORTA = BigDecimal.valueOf(0.3);
     private Long id;
 
     @NotNull
@@ -45,14 +51,14 @@ public class ParedeDTO implements Serializable {
     }
 
     // Regra: O total de área das portas e janelas deve ser no máximo 50% da área de parede
-    @DecimalMin(value = "0")
-    @DecimalMax(value = "0.5")
-    public BigDecimal getAreaProporcionalPortasJanelas() {
+    @PositiveOrZero
+    @DecimalMax(value = "0.50")
+    public BigDecimal getAreaProporcionalPortasJanelasMaiorQue50Porcento() {
         // Regra: Cada janela possui as medidas: 2,00 x 1,20 mtos
-        final var AREA_JANELA = BigDecimal.valueOf(2).multiply(BigDecimal.valueOf(1.2));
+        final var AREA_JANELA = JANELA_LARGURA.multiply(JANELA_ALTURA);
 
         // Regra: Cada porta possui as medidas: 0,80 x 1,90
-        final var AREA_PORTA = BigDecimal.valueOf(0.8).multiply(BigDecimal.valueOf(1.9));
+        final var AREA_PORTA = PORTA_LARGURA.multiply(PORTA_ALTURA);
 
         final Integer janelas = Objects.requireNonNullElse(this.getNumJanelas(), 0);
         final var areaJanelas = AREA_JANELA.multiply(BigDecimal.valueOf(janelas));
@@ -67,7 +73,37 @@ public class ParedeDTO implements Serializable {
 
         final var areaTotalParede = Objects.requireNonNullElse(this.getAreaTotal(), BigDecimal.ZERO);
 
-        return areaPortasEJanelas.setScale(2).divide(areaTotalParede.setScale(2));
+        final var valor = areaPortasEJanelas.divide(areaTotalParede, 2, RoundingMode.HALF_EVEN);
+
+        return valor;
+    }
+
+    /*    @AssertFalse
+    public Boolean getParedeEstreitaDemais() {
+        if (this.numPortas > 0) {
+            if (this.largura.compareTo(PORTA_LARGURA) >= 0) {
+                // tem largura suficiente
+                return false;
+            }
+            return true;
+        }
+
+        // nao tem nenhuma porta
+        return false;
+    }*/
+
+    @AssertFalse
+    public Boolean getParedeBaixaDemais() {
+        if (this.numPortas > 0) {
+            if (this.altura.subtract(PORTA_ALTURA).compareTo(PAREDE_MAIS_ALTA_QUE_PORTA) >= 0) {
+                // tem altura suficiente
+                return false;
+            }
+            return true;
+        }
+
+        // nao tem nenhuma porta
+        return false;
     }
 
     public Long getId() {
