@@ -8,6 +8,8 @@ export interface IParede {
   numPortas?: number | null;
   numJanelas?: number | null;
   sala?: Pick<ISala, 'id' | 'nome'> | null;
+  areaProporcionalDePortasEJanelas?: number | null;
+  areaPintavel?: number | null;
 }
 
 export type NewParede = Omit<IParede, 'id'> & { id: null };

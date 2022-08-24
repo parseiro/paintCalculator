@@ -59,23 +59,34 @@ public class ParedeDTO implements Serializable {
     // Regra: O total de área das portas e janelas deve ser no máximo 50% da área de parede
     @PositiveOrZero
     @DecimalMax(value = "0.50")
-    public BigDecimal getAreaProporcionalPortasJanelasMaiorQue50Porcento() {
+    public BigDecimal getAreaProporcionalDePortasEJanelas() {
+        final var areaPortasEJanelas = this.getAreaDePortasEJanelas();
+
+        final var areaTotalParede = Objects.requireNonNullElse(this.getAreaTotal(), BigDecimal.ZERO);
+
+        final var proporcao = areaPortasEJanelas.divide(areaTotalParede, 2, RoundingMode.HALF_EVEN);
+
+        return proporcao;
+    }
+
+    public BigDecimal getAreaPintavel() {
+        final var areaTotalParede = Objects.requireNonNullElse(this.getAreaTotal(), BigDecimal.ZERO);
+
+        final var areaPortasEJanelas = this.getAreaDePortasEJanelas();
+
+        final var areaPintavel = areaTotalParede.subtract(areaPortasEJanelas).setScale(2);
+
+        return areaPintavel;
+    }
+
+    public BigDecimal getAreaDePortasEJanelas() {
         final Integer janelas = Objects.requireNonNullElse(this.getNumJanelas(), 0);
         final var areaJanelas = AREA_JANELA.multiply(BigDecimal.valueOf(janelas));
 
         final Integer portas = Objects.requireNonNullElse(this.getNumPortas(), 0);
         final var areaPortas = AREA_PORTA.multiply(BigDecimal.valueOf(portas));
 
-        final var areaPortasEJanelas = areaJanelas.add(areaPortas);
-        if (areaPortasEJanelas.compareTo(BigDecimal.ZERO) == 0) {
-            return BigDecimal.ZERO;
-        }
-
-        final var areaTotalParede = Objects.requireNonNullElse(this.getAreaTotal(), BigDecimal.ZERO);
-
-        final var valor = areaPortasEJanelas.divide(areaTotalParede, 2, RoundingMode.HALF_EVEN);
-
-        return valor;
+        return areaJanelas.add(areaPortas).setScale(2);
     }
 
     /*    @AssertFalse

@@ -38,6 +38,8 @@
           <th scope="col" jhiSortBy="numPortas"><span>Num Portas</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="numJanelas"><span>Num Janelas</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="sala.nome"><span>Sala</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="areaProporcionalDePortasEJanelas"><span>Area P&J (%)</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="areaPintavel"><span>Area pintavel (m2)</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -55,6 +57,8 @@
               <a [routerLink]="['/sala', parede.sala.id, 'view']">{{ parede.sala?.nome }}</a>
             </div>
           </td>
+          <td>{{ parede.areaProporcionalDePortasEJanelas }}</td>
+          <td>{{ parede.areaPintavel }}</td>
           <td class="text-end">
             <div class="btn-group">
               <button type="submit" [routerLink]="['/parede', parede.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
