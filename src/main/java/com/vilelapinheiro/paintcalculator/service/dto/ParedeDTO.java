@@ -16,6 +16,12 @@ public class ParedeDTO implements Serializable {
     public static final BigDecimal PORTA_LARGURA = BigDecimal.valueOf(0.8);
     public static final BigDecimal PORTA_ALTURA = BigDecimal.valueOf(1.9);
     public static final BigDecimal PAREDE_MAIS_ALTA_QUE_PORTA = BigDecimal.valueOf(0.3);
+    // Regra: Cada janela possui as medidas: 2,00 x 1,20 mtos
+    public static final BigDecimal AREA_JANELA = JANELA_LARGURA.multiply(JANELA_ALTURA);
+
+    // Regra: Cada porta possui as medidas: 0,80 x 1,90
+    public static final BigDecimal AREA_PORTA = PORTA_LARGURA.multiply(PORTA_ALTURA);
+
     private Long id;
 
     @NotNull
@@ -54,12 +60,6 @@ public class ParedeDTO implements Serializable {
     @PositiveOrZero
     @DecimalMax(value = "0.50")
     public BigDecimal getAreaProporcionalPortasJanelasMaiorQue50Porcento() {
-        // Regra: Cada janela possui as medidas: 2,00 x 1,20 mtos
-        final var AREA_JANELA = JANELA_LARGURA.multiply(JANELA_ALTURA);
-
-        // Regra: Cada porta possui as medidas: 0,80 x 1,90
-        final var AREA_PORTA = PORTA_LARGURA.multiply(PORTA_ALTURA);
-
         final Integer janelas = Objects.requireNonNullElse(this.getNumJanelas(), 0);
         final var areaJanelas = AREA_JANELA.multiply(BigDecimal.valueOf(janelas));
 
